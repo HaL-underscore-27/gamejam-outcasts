@@ -4,3 +4,8 @@
 
 [node name="Node3D" type="Node3D"]
 script = ExtResource("1_a202f")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
