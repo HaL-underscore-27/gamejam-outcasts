@@ -1,6 +1,7 @@
 extends Node3D
 
-@onready var timer = $Timer  # make sure your Timer node is named 'Timer'
+@onready var timer: Timer = get_tree().root.get_node("Game/UI/Timer")
+
 
 var countdown = 10  # seconds
 
