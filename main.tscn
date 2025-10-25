@@ -1,6 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=11 format=3 uid="uid://bxtnfolff3kw1"]
 
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://bbc4s2doob6o" path="res://zombie.gd" id="2_0xm2m"]
+[ext_resource type="Script" uid="uid://bed0x1mfmvd0m" path="res://ui.gd" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://dpwwjbygdkco6" path="res://images/crosshair.png" id="4_1bvp3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -17,6 +20,10 @@ glow_enabled = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0xm2m"]
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0xm2m"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_h2yge"]
+
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -28,7 +35,7 @@ use_collision = true
 size = Vector3(28.9297, 1, 34.7396)
 
 [node name="Player" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10827, 6.08518, 2.07824)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10827, 6.08518, -8.38182)
 script = ExtResource("1_ig7tw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
@@ -47,6 +54,39 @@ text = "Health:100
 "
 font_size = 40
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Zombie" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.16626, 2.05447, 0)
+script = ExtResource("2_0xm2m")
+target_path = NodePath("../Player")
 
-[node name="Label3D" type="Label3D" parent="."]
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="Zombie"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Zombie"]
+mesh = SubResource("CapsuleMesh_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie"]
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_h2yge")
+
+[node name="Timer" type="Timer" parent="UI"]
+
+[node name="PlaytimeLabel" type="Label" parent="UI"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Crosshair" type="TextureRect" parent="UI"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -26.0
+offset_top = -26.0
+offset_right = 494.0
+offset_bottom = 494.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_1bvp3")
