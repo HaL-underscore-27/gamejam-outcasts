@@ -79,3 +79,31 @@ func _headbob(time) -> Vector3:
 	pos.y = sin(time * BOB_FREQ) * BOB_AMP
 	pos.x = cos(time * BOB_FREQ / 2) * BOB_AMP
 	return pos
+	
+	
+var max_health = 100
+var current_health = max_health
+
+@onready var health_label = $HealthBar3D
+
+func setup_health_bar():
+	update_health_display()
+
+func take_damage(amount: int):
+	current_health = max(current_health - amount, 0)
+	update_health_display()
+	if current_health == 0:
+		print("Player died")
+		health_label.text = "Health: 0 (Dead)"
+
+func heal(amount: int):
+	current_health = min(current_health + amount, max_health)
+	update_health_display()
+
+func reset_health():
+	current_health = max_health
+	update_health_display()
+
+func update_health_display():
+	if health_label:
+		health_label.text = "Health: %d" % current_health

@@ -18,3 +18,5 @@ func _on_timer_timeout():
 	else:
 		print("Countdown finished!")
 		timer.stop()
+
+		
