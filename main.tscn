@@ -1,6 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=10 format=3 uid="uid://bxtnfolff3kw1"]
 
+[ext_resource type="Script" uid="uid://b7q2l776bk25v" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://bh5a52e84ilvg" path="res://cube.gd" id="3_h2yge"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -17,13 +19,18 @@ glow_enabled = true
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0xm2m"]
 
+[sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lquwl"]
+
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_0xm2m")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_h2yge")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.69719, 0, -12.8485)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.671041, 0, -12.839054)
 use_collision = true
 size = Vector3(28.9297, 1, 34.7396)
 
@@ -39,8 +46,18 @@ shape = SubResource("CapsuleShape3D_0xm2m")
 [node name="Head" type="Node3D" parent="Player"]
 
 [node name="Camera3D" type="Camera3D" parent="Player/Head"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.495593, 0.657842)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.49559307, 0.6578419)
 
 [node name="Timer" type="Timer" parent="."]
 
 [node name="Label3D" type="Label3D" parent="."]
+
+[node name="Cube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0481106, 0)
+mesh = SubResource("BoxMesh_1bvp3")
+script = ExtResource("3_h2yge")
+
+[node name="Area3D" type="Area3D" parent="Cube"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/Area3D"]
+shape = SubResource("BoxShape3D_lquwl")
