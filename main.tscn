@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=12 format=3 uid="uid://bxtnfolff3kw1"]
 
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://dbp5jsqfjokjs" path="res://day_night_controller.gd" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://bbc4s2doob6o" path="res://zombie.gd" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://bed0x1mfmvd0m" path="res://ui.gd" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://dpwwjbygdkco6" path="res://images/crosshair.png" id="4_1bvp3"]
@@ -26,8 +27,17 @@ glow_enabled = true
 
 [node name="Node3D" type="Node3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Sun" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(0.924075, -0.331006, 0.191105, -1.49013e-08, 0.499998, 0.866027, -0.382212, -0.800273, 0.462035, 0, 24.2943, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 environment = SubResource("Environment_h2yge")
+
+[node name="DayNightController" type="Node3D" parent="Environment"]
+script = ExtResource("1_lquwl")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.69719, 0, -12.8485)

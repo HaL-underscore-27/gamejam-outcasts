@@ -2,6 +2,7 @@ extends CharacterBody3D
 
 @export var speed: float = 2.0
 @export var target_path: NodePath  # Reference to Player
+@export var detection_radius: float = 5.0  # Distance at which zombie starts chasing
 
 @onready var target: CharacterBody3D = get_node_or_null(target_path)
 
@@ -19,12 +20,20 @@ func _physics_process(delta: float) -> void:
 	if not target:
 		return
 
-	var direction = (target.global_position - global_position).normalized()
-	velocity = direction * speed
+	var distance_to_player = global_position.distance_to(target.global_position)
 
-	move_and_slide()
+	if distance_to_player <= detection_radius:
+		# Player is close, start chasing
+		var direction = (target.global_position - global_position).normalized()
+		velocity = direction * speed
+		move_and_slide()
+		
+		# Make the zombie face the player (ignore Y rotation difference)
+		look_at(Vector3(target.global_position.x, global_position.y, target.global_position.z))
 
-	# Make the zombie face the player (ignore Y rotation difference)
-	look_at(Vector3(target.global_position.x, global_position.y, target.global_position.z))
-
-	print("🧟‍♂️ Zombie chasing", target.name)
+		print("🧟‍♂️ Zombie chasing", target.name)
+	else:
+		# Idle: stop moving
+		velocity = Vector3.ZERO
+		move_and_slide()
+		print("😴 Zombie idle")
