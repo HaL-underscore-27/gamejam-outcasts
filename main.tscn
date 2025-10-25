@@ -1,12 +1,16 @@
-[gd_scene load_steps=16 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=18 format=3 uid="uid://bxtnfolff3kw1"]
 
 [ext_resource type="Script" uid="uid://b7q2l776bk25v" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://dbp5jsqfjokjs" path="res://day_night_controller.gd" id="1_lquwl"]
 [ext_resource type="Script" uid="uid://bbc4s2doob6o" path="res://zombie.gd" id="2_0xm2m"]
-[ext_resource type="Script" path="res://cube.gd" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://de1wv02sca05u" path="res://3d-assets/sandbag_barrier_ready_for_unreal_engine.glb" id="2_5vw27"]
+[ext_resource type="Script" uid="uid://bh5a52e84ilvg" path="res://cube.gd" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://dpwwjbygdkco6" path="res://images/crosshair.png" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://bed0x1mfmvd0m" path="res://ui.gd" id="5_272bh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5vw27"]
+size = Vector3(4.51471, 1.495, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -33,6 +37,17 @@ glow_enabled = true
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_0xm2m")
+
+[node name="3d-models" type="Node3D" parent="."]
+
+[node name="Sandbag" parent="3d-models" instance=ExtResource("2_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.70924, 1.56841, 3.74437)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="3d-models/Sandbag"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="3d-models/Sandbag/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.119056, 0.253292, -0.090466)
+shape = SubResource("BoxShape3D_5vw27")
 
 [node name="Environment" type="Node3D" parent="."]
 
