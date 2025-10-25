@@ -1,12 +1,27 @@
-[gd_scene load_steps=16 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=22 format=3 uid="uid://qfvk0byinw25"]
 
 [ext_resource type="Script" uid="uid://b7q2l776bk25v" path="res://main.gd" id="1_0xm2m"]
-[ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
-[ext_resource type="Script" uid="uid://dbp5jsqfjokjs" path="res://day_night_controller.gd" id="1_lquwl"]
-[ext_resource type="Script" uid="uid://bbc4s2doob6o" path="res://zombie.gd" id="2_0xm2m"]
+[ext_resource type="Script" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Script" path="res://day_night_controller.gd" id="1_lquwl"]
+[ext_resource type="Script" path="res://zombie.gd" id="2_0xm2m"]
+[ext_resource type="Texture2D" uid="uid://ckp1w24t07wpc" path="res://roadtex.png" id="2_5vw27"]
+[ext_resource type="Texture2D" uid="uid://cqcbeo72duqu2" path="res://intertex.png" id="2_kek77"]
 [ext_resource type="Script" path="res://cube.gd" id="3_h2yge"]
 [ext_resource type="Texture2D" uid="uid://dpwwjbygdkco6" path="res://images/crosshair.png" id="4_1bvp3"]
-[ext_resource type="Script" uid="uid://bed0x1mfmvd0m" path="res://ui.gd" id="5_272bh"]
+[ext_resource type="Script" path="res://ui.gd" id="5_272bh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4c57u"]
+albedo_texture = ExtResource("2_kek77")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kek77"]
+albedo_texture = ExtResource("2_5vw27")
+uv1_scale = Vector3(1, 4, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efxa6"]
+albedo_color = Color(0.4862745, 0.4862745, 0.4862745, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dg77c"]
+albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -34,6 +49,221 @@ glow_enabled = true
 [node name="Game" type="Node3D"]
 script = ExtResource("1_0xm2m")
 
+[node name="Road-network" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.78540444, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="road-intersection" type="Node3D" parent="Road-network"]
+
+[node name="interway" type="CSGBox3D" parent="Road-network/road-intersection"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, 10.517794, 4.068058, 41.910183)
+use_collision = true
+size = Vector3(78.4915, 0.3022461, 22.530376)
+material = SubResource("StandardMaterial3D_4c57u")
+
+[node name="interway2" type="CSGBox3D" parent="Road-network/road-intersection"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -45.129044, 4.068058, 41.910183)
+use_collision = true
+size = Vector3(78.4915, 0.3022461, 22.530376)
+material = SubResource("StandardMaterial3D_4c57u")
+
+[node name="road-straight" type="Node3D" parent="Road-network"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07236481, 0, 0)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -15.433698, 3.3726666, 48.343113)
+use_collision = true
+size = Vector3(191.98676, 1.8592529, 681.6558)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -24.087166, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(269.37683, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight4" type="Node3D" parent="Road-network"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.35912, 0, 0)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight4"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="highway2" type="CSGBox3D" parent="Road-network/road-straight4"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, 20.986568, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="highway3" type="CSGBox3D" parent="Road-network/road-straight4"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, 59.49165, 4.068144, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight4"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.350796, 3.3726666, 48.343113)
+use_collision = true
+size = Vector3(209.22922, 1.8592529, 681.6558)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight4"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.654976, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(206.44135, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight2" type="Node3D" parent="Road-network"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.569231, 0, 52.46039)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight2"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight2"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 48.476772)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight2"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight8" type="Node3D" parent="Road-network"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -89.191895, 0, 83.74823)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -16.78881, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(168.95526, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="highway2" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, 21.140953, 4.064933, 41.950592)
+use_collision = true
+size = Vector3(176.86945, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="support" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.21940258, 0, -0.103360176, 0, 0.99999994, 0, 0.029169327, 0, 0.7774429, 40.892967, 4.0681286, 39.43742)
+use_collision = true
+size = Vector3(6.9223404, 0.3022461, 5.0678244)
+material = SubResource("StandardMaterial3D_dg77c")
+
+[node name="support2" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.21669668, 0, -0.15968604, 0, 0.99999976, 0, 0.045065083, 0, 0.7678548, 80.05567, 4.0933847, 46.42209)
+use_collision = true
+size = Vector3(6.9223404, 0.3022461, 5.2702403)
+material = SubResource("StandardMaterial3D_dg77c")
+
+[node name="highway3" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.21792816, 0, -0.13703862, 0, 0.99999994, 0, 0.038673732, 0, 0.77221835, 60.071693, 4.0681286, 45.39938)
+use_collision = true
+size = Vector3(178.26518, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="highway4" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.21431401, 0, -0.19594483, 0, 0.9999998, 0, 0.05529769, 0, 0.7594119, 98.82058, 4.0681286, 53.83098)
+use_collision = true
+size = Vector3(180.58586, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 48.43592)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight8"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -18.585632, 3.3726742, 35.321247)
+use_collision = true
+size = Vector3(186.6355, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight7" type="Node3D" parent="Road-network"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -87.34856, 0, 52.46039)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight7"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight7"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -14.898151, 3.3589108, 48.536594)
+use_collision = true
+size = Vector3(191.7362, 1.859, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight7"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight3" type="Node3D" parent="Road-network"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.569231, 0, -2.9746208)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight3"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight3"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 48.476772)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight3"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight5" type="Node3D" parent="Road-network"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.569231, 0, -41.213036)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight5"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Road-network/road-straight5"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 48.476772)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Road-network/road-straight5"]
+transform = Transform3D(0.2223692, 0, 0, 0, 1.0555612, 0, 0, 0, 0.006749121, -17.200905, 3.3726666, 35.321247)
+use_collision = true
+size = Vector3(174.18115, 1.8592529, 642.048)
+material = SubResource("StandardMaterial3D_efxa6")
+
+[node name="road-straight6" type="Node3D" parent="Road-network"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.569231, 0, -78.84595)
+
+[node name="highway" type="CSGBox3D" parent="Road-network/road-straight6"]
+transform = Transform3D(0.2213331, 0, 0, 0, 1, 0, 0, 0, 0.78428364, -17.29968, 4.0681286, 41.97625)
+use_collision = true
+size = Vector3(173.57166, 0.3022461, 11.614803)
+material = SubResource("StandardMaterial3D_kek77")
+
 [node name="Environment" type="Node3D" parent="."]
 
 [node name="Sun" type="DirectionalLight3D" parent="Environment"]
@@ -47,9 +277,9 @@ environment = SubResource("Environment_h2yge")
 script = ExtResource("1_lquwl")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.67104, 0, -12.8391)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7799683, 2.7013893, 0.38912964)
 use_collision = true
-size = Vector3(28.9297, 1, 34.7396)
+size = Vector3(499.75183, 1, 315.05)
 
 [node name="Player" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.10827, 6.08518, -8.38182)
