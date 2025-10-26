@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://do8817dxq08m2"]
+
+[ext_resource type="PackedScene" uid="uid://ck3p54n0bk48a" path="res://3d-assets/zombie.glb" id="1_uiaus"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_uiaus")]
+
+[node name="tie_10" parent="Sketchfab_model/root/GLTF_SceneRootNode/_46/base_45/chest_44" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.08609, -0.28343)
