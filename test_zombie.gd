@@ -1,7 +1,8 @@
 extends CharacterBody3D
 
 @export var speed: float = 2.0
-@export var detection_radius: float = 20.0
+@export var barricade_detection_radius: float = 1.0
+@export var player_detection_radius: float = 15.0
 @export var attack_range: float = 1.5
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 0.5
@@ -27,11 +28,25 @@ func _physics_process(delta: float) -> void:
 
 	velocity.y -= gravity * delta
 
-	# Find closest barricade within attack range
-	barricade_target = _find_closest_barricade_in_range()
+	# Find closest barricade within its detection radius
+	barricade_target = _find_closest_barricade_in_range(barricade_detection_radius)
 
-	# Decide main target: barricade if nearby, otherwise player
-	var attack_target: Node3D = barricade_target if barricade_target else target
+	# Decide main target: barricade if within its radius, otherwise player
+	var attack_target: Node3D = null
+	if barricade_target:
+		attack_target = barricade_target
+	else:
+		# Only chase player if within player detection range
+		var distance_to_player = global_position.distance_to(target.global_position)
+		if distance_to_player <= player_detection_radius:
+			attack_target = target
+
+	if not attack_target:
+		# Nothing to chase or attack
+		if anim_player.current_animation != "idle":
+			anim_player.play("idle")
+		return
+
 	var distance_to_target = global_position.distance_to(attack_target.global_position)
 
 	# Move towards target if out of attack range
@@ -68,20 +83,26 @@ func _physics_process(delta: float) -> void:
 		_attack_target(attack_target)
 		attack_timer = attack_cooldown
 
-# Find closest barricade within attack_range
-func _find_closest_barricade_in_range() -> Node3D:
+
+# Find closest barricade within a given radius
+func _find_closest_barricade_in_range(radius: float) -> Node3D:
 	var closest: Node3D = null
 	var closest_dist = INF
 	for barricade in get_tree().get_nodes_in_group("barricades"):
 		if barricade is Node3D:
 			var dist = global_position.distance_to(barricade.global_position)
-			if dist <= attack_range and dist < closest_dist:
+			if dist <= radius and dist < closest_dist:
 				closest = barricade
 				closest_dist = dist
 	return closest
 
+
 # Attack function
 func _attack_target(attack_target: Node3D) -> void:
+	# 🧱 Only attack valid targets: barricades or the player
+	if not (attack_target.is_in_group("barricades") or attack_target.name == "Player"):
+		return  # Ignore pickups and other objects completely
+
 	if attack_target.has_method("take_damage"):
 		attack_target.take_damage(attack_damage)
 		print("🧟‍♂️ Zombie attacked", attack_target.name, "for", attack_damage, "HP")

@@ -1,7 +1,7 @@
 extends Node3D
 
 # --- Configuration ---
-@export var heal_amount: int = 20   # HP restored when eaten
+@export var heal_amount: int = 20
 @export var pickup_distance: float = 3.0
 @export var item_name: String = "Pearto"
 
@@ -9,6 +9,13 @@ extends Node3D
 @export var hand_position: Vector3 = Vector3(0.6, -0.4, -1.0)
 @export var hand_rotation_degrees: Vector3 = Vector3(0, 0, 0)
 @export var hand_scale: Vector3 = Vector3(0.1, 0.1, 0.1)
+
+# --- Spin & Float settings ---
+@export var spin_speed: float = 60.0          # degrees per second
+@export var float_amplitude: float = 0.2      # vertical bobbing range
+@export var float_speed: float = 2.0          # how fast it moves up/down
+var _base_y: float = 0.0
+var _time: float = 0.0
 
 # --- State ---
 var picked_up: bool = false
@@ -20,24 +27,27 @@ var player: Node = null
 
 
 func _ready():
-	# Find player automatically
-	player = get_tree().root.get_node("Game/Player") # <-- adjust path if needed
+	player = get_tree().root.get_node("Game/Player")
 	if not player:
-		push_warning("Player node not found. Check the path!")
-
+		push_warning("Player node not found!")
+	_base_y = global_position.y
 	set_process(true)
 
 
-func _process(_delta):
-	if picked_up or player == null:
+func _process(delta):
+	# Skip if picked up or held
+	if picked_up or player == null or get_parent() == player.hotbar_storage or get_parent() == player.camera:
 		return
 
-	# Check distance to player
+	# --- Animate spin + float ---
+	_time += delta
+	rotate_y(deg_to_rad(spin_speed * delta))
+	global_position.y = _base_y + sin(_time * float_speed) * float_amplitude
+
+	# --- Check distance for pickup ---
 	var dist = global_position.distance_to(player.global_position)
 	if dist <= pickup_distance:
 		_show_interaction_hint(true)
-
-		# Pickup with 'E' key
 		if Input.is_action_just_pressed("interact"):
 			_pickup()
 	else:
@@ -48,21 +58,18 @@ func _pickup():
 	if picked_up:
 		return
 	picked_up = true
-
 	print("%s picked up!" % item_name)
 
-	# Add to player's hotbar (the Player script handles hiding & reparenting)
 	if player and player.has_method("add_item_to_hotbar"):
 		player.add_item_to_hotbar(self)
 	else:
 		push_warning("Player does not have 'add_item_to_hotbar' method!")
 
 
-# === When the item is used (from hotbar) ===
 func use_item():
 	print("%s eaten!" % item_name)
 	_heal_player()
-	queue_free()  # remove from hand once used
+	queue_free()
 
 
 func _heal_player():
@@ -74,6 +81,5 @@ func _heal_player():
 
 
 func _show_interaction_hint(visible: bool):
-	# Optional placeholder — can be replaced with UI prompts later
 	if visible:
 		print("Press [E] to pick up %s" % item_name)

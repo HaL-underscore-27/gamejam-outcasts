@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://bu7gep5gbjfd"
+path.s3tc="res://.godot/imported/dystopia_floor.jpg-bdc2b4441558b49502068a219efbd2aa.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "16730ee4c65243d7fdff90daa50ff8ff"
+}
+
+[deps]
+
+source_file="res://3d-assets/dystopia_floor.jpg"
+dest_files=["res://.godot/imported/dystopia_floor.jpg-bdc2b4441558b49502068a219efbd2aa.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0
