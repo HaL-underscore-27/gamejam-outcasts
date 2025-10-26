@@ -31,6 +31,12 @@ func _ready():
 	var tween = create_tween()
 	tween.tween_property(material, "albedo_color:a", 0.0, range / speed)
 
+<<<<<<< HEAD
+	# Immediately check for any overlapping targets on spawn
+	for body in get_overlapping_bodies():
+		_on_body_entered(body)
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 func _physics_process(delta):
 	var move_amount = speed * delta
@@ -43,5 +49,9 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body is CharacterBody3D and body.has_method("take_damage"):
 		body.take_damage(damage)
+<<<<<<< HEAD
+		print("💥 Hit ", body.name, " for ", damage, " damage!")
+=======
 		print("💥 Hit", body.name, "for", damage, "damage!")
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 	queue_free()

@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://dailnpl7jt8er"]
+
+[ext_resource type="Texture2D" uid="uid://y58tuyv6ih2i" path="res://images/gameover.jpeg" id="1_4nh4k"]
+
+[node name="Gameover" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 637.0
+offset_bottom = 358.0
+texture = ExtResource("1_4nh4k")
+stretch_mode = 1

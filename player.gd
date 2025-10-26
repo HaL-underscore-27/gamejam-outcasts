@@ -23,6 +23,7 @@ var gravity = 9.8
 @export var health: int = 70
 @export var max_health: int = 100
 
+
 # === Hotbar constants ===
 const HOTBAR_SIZE = 5
 var hotbar_items: Array = []
@@ -33,16 +34,26 @@ var equipped_item: Node = null
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var hotbar_storage = $HotbarStorage
+<<<<<<< HEAD
+@onready var health_label: Label = get_tree().current_scene.get_node("UI/Health")
 
+
+
+=======
+
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 # Reference to templates
 @onready var barricade_template = get_tree().root.get_node("Game/3d-models/Sandbag") # adjust path
 @onready var zombie_template = get_tree().root.get_node("Game/Zombie") # adjust path
 @onready var shotgun_template = get_tree().root.get_node("Game/3d-models/Shotgun") # adjust path
+<<<<<<< HEAD
+=======
 @onready var barricade_template = get_tree().get_root().find_child("Sandbag", true, false)
 
 # Instead of hardcoded paths, we’ll search for them dynamically
 var inventory: Node = null
 var hotbar_ui: Node = null
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 # === Damage flash overlay ===
 @onready var damage_flash_layer: CanvasLayer = CanvasLayer.new()
@@ -92,15 +103,27 @@ func take_damage(amount: int) -> void:
 	health = max(health, 0)
 	print("💔 Player took", amount, "damage! HP:", health)
 	_trigger_damage_flash()
+	
+	# Update the label if it exists
+	if health_label:
+		health_label.text = str(health) + " / " + str(max_health)
+
 	if health <= 0:
 		print("☠️ Player is dead!")
+<<<<<<< HEAD
+		get_tree().change_scene_to_file("res://GameOver.tscn")
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 func _trigger_damage_flash():
 	damage_flash_rect.color = Color(1, 0, 0, 0.5)
 	var tween = create_tween()
 	tween.tween_property(damage_flash_rect, "color", Color(1, 0, 0, 0), flash_duration)
 
+<<<<<<< HEAD
+=======
 # === Input ===
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
@@ -126,7 +149,10 @@ func _unhandled_input(event):
 		if equipped_item and equipped_item.has_method("use_item"):
 			equipped_item.use_item()
 
+<<<<<<< HEAD
+=======
 # === Movement ===
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -194,6 +220,18 @@ func _spawn_zombie():
 	
 	var zombie_instance = zombie_template.duplicate()
 	zombie_instance.name = "ZombieInstance"
+<<<<<<< HEAD
+
+	var forward = -camera.global_transform.basis.z.normalized()
+	var spawn_position = global_transform.origin + forward * 5.0
+	zombie_instance.global_transform.origin = spawn_position
+
+	zombie_instance.rotation.y = rotation.y
+
+	get_tree().current_scene.add_child(zombie_instance)
+	print("🧟 Spawned a zombie at", spawn_position)
+
+=======
 
 	var forward = -camera.global_transform.basis.z.normalized()
 	var spawn_position = global_transform.origin + forward * 5.0
@@ -210,7 +248,9 @@ func _set_collision_layer_recursive(node: Node, layer: int):
 	for child in node.get_children():
 		_set_collision_layer_recursive(child, layer)
 
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 # === Hotbar system ===
+# --- Hotbar system ---
 func add_item_to_hotbar(item_source: Node) -> bool:
 	if not inventory:
 		push_warning("⚠️ Inventory node not found when adding item!")
@@ -232,20 +272,32 @@ func add_item_to_hotbar(item_source: Node) -> bool:
 func _select_hotbar_item(index: int):
 	current_hotbar_index = index
 
+<<<<<<< HEAD
+	# Unequip previous
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 	if equipped_item:
 		equipped_item.visible = false
 		if equipped_item.get_parent():
 			equipped_item.get_parent().remove_child(equipped_item)
+<<<<<<< HEAD
+		hotbar_storage.add_child(equipped_item)
+=======
 		if inventory:
 			inventory.add_child(equipped_item)
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 		_enable_collisions_recursive(equipped_item)
 		equipped_item = null
 
+	# Equip new item
 	var item = hotbar_items[index]
 	if item == null:
+<<<<<<< HEAD
+=======
 		print("Slot %d empty" % (index + 1))
 		if hotbar_ui and hotbar_ui.has_method("update_hotbar"):
 			hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 		return
 
 	if item.get_parent():
@@ -254,6 +306,10 @@ func _select_hotbar_item(index: int):
 	item.visible = true
 	equipped_item = item
 
+<<<<<<< HEAD
+	# Set position/rotation/scale from exported vars
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 	item.position = item.get("hand_position")
 	item.rotation_degrees = item.get("hand_rotation_degrees")
 	item.scale = item.get("hand_scale")
