@@ -52,6 +52,11 @@ func _ready():
 	
 	# Initialize damage flash overlay
 	_init_damage_flash()
+	
+	# Auto-equip gun at start
+	var gun = get_node("/root/Game/Gun")
+	if gun:
+		add_item_to_hotbar(gun)
 
 func _init_damage_flash():
 	add_child(damage_flash_layer)

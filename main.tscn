@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bxtnfolff3kw1"]
+[gd_scene load_steps=29 format=3 uid="uid://bxtnfolff3kw1"]
 
 [ext_resource type="Script" uid="uid://b7q2l776bk25v" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://cuk5tjg7io20" path="res://3d-assets/ammo_box.glb" id="5_dg77c"]
 [ext_resource type="PackedScene" uid="uid://ck3p54n0bk48a" path="res://3d-assets/zombie.glb" id="5_efxa6"]
 [ext_resource type="Script" uid="uid://djgiaolnhvrt5" path="res://3d-assets/ammo_box.gd" id="7_vivmo"]
+[ext_resource type="Script" uid="uid://cmukwp1gjpmxn" path="res://bullet.gd" id="15_vivmo"]
+[ext_resource type="Script" uid="uid://bugcpkuborqj" path="res://gun.gd" id="16_2cqfq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5vw27"]
 size = Vector3(4.51471, 1.495, 1)
@@ -40,6 +42,17 @@ glow_enabled = true
 [sub_resource type="BoxMesh" id="BoxMesh_1bvp3"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lquwl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2cqfq"]
+albedo_color = Color(1, 1, 0.08235294, 1)
+emission_enabled = true
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_w48qg"]
+radius = 0.05
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vivmo"]
+radius = 0.05
 
 [node name="Game" type="Node3D"]
 script = ExtResource("1_0xm2m")
@@ -148,3 +161,17 @@ shape = SubResource("BoxShape3D_lquwl")
 [node name="zombiespawners" type="Node3D" parent="."]
 
 [node name="itemspawners" type="Node3D" parent="."]
+
+[node name="Bullet" type="Area3D" parent="."]
+visible = false
+script = ExtResource("15_vivmo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Bullet"]
+material_override = SubResource("StandardMaterial3D_2cqfq")
+mesh = SubResource("SphereMesh_w48qg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Bullet"]
+shape = SubResource("SphereShape3D_vivmo")
+
+[node name="Gun" type="Node3D" parent="."]
+script = ExtResource("16_2cqfq")
