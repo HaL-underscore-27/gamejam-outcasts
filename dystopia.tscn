@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ct7xo4a16slcy"]
+
+[node name="dystopia"]
+
+[node name="Car8" parent="." index="0"]
+transform = Transform3D(0.158047, 0, 0, 0, -5.6522e-08, -0.158047, 0, 0.158047, -5.6522e-08, -5.82918, 2.28472, 14.8206)
