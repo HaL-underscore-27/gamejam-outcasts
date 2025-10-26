@@ -32,6 +32,12 @@ var equipped_item: Node = null
 # === Node references ===
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
+@onready var hotbar_storage = $HotbarStorage
+
+# Reference to templates
+@onready var barricade_template = get_tree().root.get_node("Game/3d-models/Sandbag") # adjust path
+@onready var zombie_template = get_tree().root.get_node("Game/Zombie") # adjust path
+@onready var shotgun_template = get_tree().root.get_node("Game/3d-models/Shotgun") # adjust path
 @onready var barricade_template = get_tree().get_root().find_child("Sandbag", true, false)
 
 # Instead of hardcoded paths, we’ll search for them dynamically
@@ -41,7 +47,7 @@ var hotbar_ui: Node = null
 # === Damage flash overlay ===
 @onready var damage_flash_layer: CanvasLayer = CanvasLayer.new()
 @onready var damage_flash_rect: ColorRect = ColorRect.new()
-@export var flash_duration: float = 0.2  # Seconds for flash fade-out
+@export var flash_duration: float = 0.2
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -64,16 +70,19 @@ func _ready():
 	hotbar_items.resize(HOTBAR_SIZE)
 	for i in range(HOTBAR_SIZE):
 		hotbar_items[i] = null
-	
+
 	# Initialize damage flash overlay
 	_init_damage_flash()
 
-# === Damage flash ===
+	# Give player a shotgun in slot 1
+	if shotgun_template:
+		add_item_to_hotbar(shotgun_template.duplicate())
+		_select_hotbar_item(0)
+
 func _init_damage_flash():
 	add_child(damage_flash_layer)
-	damage_flash_layer.layer = 100  # Always render on top
-
-	damage_flash_rect.color = Color(1, 0, 0, 0)
+	damage_flash_layer.layer = 100
+	damage_flash_rect.color = Color(1,0,0,0)
 	damage_flash_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	damage_flash_layer.add_child(damage_flash_rect)
 	damage_flash_rect.anchors_preset = Control.PRESET_FULL_RECT
@@ -101,6 +110,10 @@ func _unhandled_input(event):
 	# Debug: spawn barricade
 	if event is InputEventKey and event.pressed and event.keycode == Key.KEY_H:
 		_spawn_barricade()
+
+	# Debug: spawn zombie
+	if event is InputEventKey and event.pressed and event.keycode == Key.KEY_J:
+		_spawn_zombie()
 
 	# Hotbar slot selection (keys 1–5)
 	if event is InputEventKey and event.pressed:
@@ -173,6 +186,24 @@ func _spawn_barricade():
 
 	add_item_to_hotbar(barricade_instance)
 
+# === Zombie spawn ===
+func _spawn_zombie():
+	if zombie_template == null:
+		print("Zombie template not found!")
+		return
+	
+	var zombie_instance = zombie_template.duplicate()
+	zombie_instance.name = "ZombieInstance"
+
+	var forward = -camera.global_transform.basis.z.normalized()
+	var spawn_position = global_transform.origin + forward * 5.0
+	zombie_instance.global_transform.origin = spawn_position
+
+	zombie_instance.rotation.y = rotation.y
+
+	get_tree().current_scene.add_child(zombie_instance)
+	print("🧟 Spawned a zombie at", spawn_position)
+
 func _set_collision_layer_recursive(node: Node, layer: int):
 	if node is PhysicsBody3D:
 		node.collision_layer = layer
@@ -196,21 +227,9 @@ func add_item_to_hotbar(item_source: Node) -> bool:
 				hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
 			print("✅ Added item to slot %d: %s" % [i + 1, item_source.name])
 			return true
-	print("⚠️ Hotbar full!")
 	return false
 
-func remove_item_from_hotbar(index: int) -> void:
-	if index >= 0 and index < HOTBAR_SIZE:
-		var item = hotbar_items[index]
-		if item and item.is_inside_tree():
-			item.queue_free()
-		hotbar_items[index] = null
-		if hotbar_ui and hotbar_ui.has_method("update_hotbar"):
-			hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
-		print("Removed item from slot %d" % (index + 1))
-
-# === Equip/unequip hotbar items ===
-func _select_hotbar_item(index: int) -> void:
+func _select_hotbar_item(index: int):
 	current_hotbar_index = index
 
 	if equipped_item:
@@ -241,12 +260,6 @@ func _select_hotbar_item(index: int) -> void:
 
 	_disable_collisions_recursive(item)
 
-	if hotbar_ui and hotbar_ui.has_method("update_hotbar"):
-		hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
-
-	print("✅ Equipped hotbar item %d: %s" % [index + 1, item.name])
-
-# === Helpers ===
 func _disable_collisions_recursive(node: Node) -> void:
 	if node is CollisionShape3D:
 		node.disabled = true
@@ -258,3 +271,9 @@ func _enable_collisions_recursive(node: Node) -> void:
 		node.disabled = false
 	for child in node.get_children():
 		_enable_collisions_recursive(child)
+
+func _set_collision_layer_recursive(node: Node, layer: int):
+	if node is PhysicsBody3D:
+		node.collision_layer = layer
+	for child in node.get_children():
+		_set_collision_layer_recursive(child, layer)
