@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @export var speed: float = 2.0
 @export var barricade_detection_radius: float = 1.0
-@export var player_detection_radius: float = 15.0
+@export var player_detection_radius: float = 40.0
 @export var attack_range: float = 1.5
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 0.5
@@ -99,10 +99,6 @@ func _find_closest_barricade_in_range(radius: float) -> Node3D:
 
 # Attack function
 func _attack_target(attack_target: Node3D) -> void:
-	# 🧱 Only attack valid targets: barricades or the player
-	if not (attack_target.is_in_group("barricades") or attack_target.name == "Player"):
-		return  # Ignore pickups and other objects completely
-
 	if attack_target.has_method("take_damage"):
 		attack_target.take_damage(attack_damage)
 		print("🧟‍♂️ Zombie attacked", attack_target.name, "for", attack_damage, "HP")
