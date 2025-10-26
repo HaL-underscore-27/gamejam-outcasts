@@ -30,10 +30,16 @@ func _ready():
 	if not player:
 		push_warning("Player node not found!")
 	_base_y = global_position.y
+<<<<<<< HEAD
+	set_process(true)
+
+
+=======
 	set_process(true)
 
 	set_process(true)
 
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _process(delta):
 	# Skip if picked up or held
 	if picked_up or player == null or get_parent() == player.hotbar_storage or get_parent() == player.camera:
@@ -64,6 +70,13 @@ func _pickup():
 	else:
 		push_warning("Player does not have 'add_item_to_hotbar' method!")
 
+<<<<<<< HEAD
+
+func use_item():
+	print("%s eaten!" % item_name)
+	_heal_player()
+	queue_free()
+=======
 # === When the item is used (from hotbar) ===
 func use_item():
 	print("%s eaten!" % item_name)
@@ -74,6 +87,7 @@ func use_item():
 		player.remove_item_from_hotbar(player.current_hotbar_index)
 
 	queue_free()  # remove from hand once used
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 
 func _heal_player():

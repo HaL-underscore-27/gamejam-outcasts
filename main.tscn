@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+[gd_scene load_steps=70 format=3 uid="uid://bxtnfolff3kw1"]
+=======
 [gd_scene load_steps=68 format=3 uid="uid://bxtnfolff3kw1"]
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 [ext_resource type="Script" uid="uid://b7q2l776bk25v" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://c0pq52lxa305" path="res://player.gd" id="1_ig7tw"]
@@ -17,6 +21,11 @@
 [ext_resource type="Script" uid="uid://djgiaolnhvrt5" path="res://3d-assets/ammo_box.gd" id="7_vivmo"]
 [ext_resource type="PackedScene" uid="uid://dyuslv6xh46p6" path="res://3d-assets/shotgun.glb" id="9_2cqfq"]
 [ext_resource type="Script" uid="uid://c1hg8mamdrh6" path="res://shotgun.gd" id="10_yaehf"]
+<<<<<<< HEAD
+[ext_resource type="Script" uid="uid://ch87dk2dglxce" path="res://health.gd" id="17_cegan"]
+[ext_resource type="Script" uid="uid://bqs3t2lonk04t" path="res://zombie_spawner.gd" id="18_074og"]
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vivmo"]
 size = Vector3(1, 9.58875, 8.72636)
@@ -140,8 +149,11 @@ size = Vector3(3.96925, 0.631683, 1.64728)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4w656"]
 size = Vector3(2.42609, 1.05472, 2.49561)
+<<<<<<< HEAD
+=======
 [ext_resource type="Script" uid="uid://l37dawq0qw1b" path="res://inventory.gd" id="14_2cqfq"]
 [ext_resource type="Texture2D" uid="uid://c83a04vgr0hhg" path="res://images/empty-icon.png" id="15_2cqfq"]
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5vw27"]
 size = Vector3(4.51471, 1.495, 1)
@@ -387,7 +399,11 @@ use_collision = true
 size = Vector3(28.9297, 1, 34.7396)
 
 [node name="Player" type="CharacterBody3D" parent="."]
+<<<<<<< HEAD
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.5281, 15.3496, -106.319)
+=======
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.541, 18.2561, -106.319)
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 script = ExtResource("1_ig7tw")
 health = 90
 
@@ -437,6 +453,13 @@ grow_vertical = 2
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_1bvp3")
 
+<<<<<<< HEAD
+[node name="Health" type="Label" parent="UI"]
+offset_right = 40.0
+offset_bottom = 23.0
+vertical_alignment = 2
+script = ExtResource("17_cegan")
+=======
 [node name="Inventory" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 7
@@ -556,6 +579,7 @@ offset_bottom = 135.00002
 scale = Vector2(8, 8)
 expand_mode = 1
 stretch_mode = 5
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 
 [node name="Label3D" type="Label3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -150.411)
@@ -570,8 +594,110 @@ script = ExtResource("3_h2yge")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Cube/Area3D"]
 shape = SubResource("BoxShape3D_lquwl")
 
+<<<<<<< HEAD
+[node name="ZombieSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.4166, 16.1079, -108.275)
+script = ExtResource("18_074og")
+
+[node name="Zombie2" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.29882, 12.009, -55.6039)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie2" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie3" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.0727, 12.009, 9.03567)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie3" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie4" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.0727, 12.009, -45.4014)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie4" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie5" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.1111, 12.009, -30.9923)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie5" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie6" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.0727, 12.009, -35.5471)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie6" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie7" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -75.4793, 12.009, -101.76)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie7" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie8" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6101, 12.009, -113.035)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie8" instance=ExtResource("5_efxa6")]
+
+[node name="Zombie9" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.1115, 12.099, -119.037)
+script = ExtResource("2_0xm2m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Zombie9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.11962, 0.244088)
+shape = SubResource("CapsuleShape3D_h2yge")
+
+[node name="zombiemodel" parent="Zombie9" instance=ExtResource("5_efxa6")]
+
+[node name="Pearto" parent="." instance=ExtResource("3_kek77")]
+transform = Transform3D(-0.0999765, 0, -0.00216752, 0, 0.1, 0, 0.00216752, 0, -0.0999765, -10.2533, 12, -113.129)
+script = ExtResource("4_4c57u")
+
+[node name="Pearto2" parent="." instance=ExtResource("3_kek77")]
+transform = Transform3D(-0.0999765, 0, -0.00216752, 0, 0.1, 0, 0.00216752, 0, -0.0999765, -31.5988, 12, -46.7033)
+script = ExtResource("4_4c57u")
+
+[node name="Pearto3" parent="." instance=ExtResource("3_kek77")]
+transform = Transform3D(-0.0999765, 0, -0.00216752, 0, 0.1, 0, 0.00216752, 0, -0.0999765, -32.673, 12, -68.2851)
+script = ExtResource("4_4c57u")
+
+[node name="Pearto4" parent="." instance=ExtResource("3_kek77")]
+transform = Transform3D(-0.0999765, 0, -0.00216752, 0, 0.1, 0, 0.00216752, 0, -0.0999765, -10.2533, 12, -50.5925)
+script = ExtResource("4_4c57u")
+=======
 [node name="zombiespawners" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -150.411)
 
 [node name="itemspawners" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -150.411)
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972

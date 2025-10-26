@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cicpgurciof81"
-path="res://.godot/imported/bagg008_1.webp-03827dd7d3e1eac2e205500745a71e49.ctex"
+uid="uid://y58tuyv6ih2i"
+path="res://.godot/imported/gameover.jpeg-642b962ef364d0988ad356fd5e6e31ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/bagg008_1.webp"
-dest_files=["res://.godot/imported/bagg008_1.webp-03827dd7d3e1eac2e205500745a71e49.ctex"]
+source_file="res://images/gameover.jpeg"
+dest_files=["res://.godot/imported/gameover.jpeg-642b962ef364d0988ad356fd5e6e31ae.ctex"]
 
 [params]
 

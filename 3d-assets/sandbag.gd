@@ -56,6 +56,17 @@ func _ready():
 	if not placed and not picked_up:
 		scale = _original_scale * world_scale_factor
 
+<<<<<<< HEAD
+	add_to_group("barricades")
+	_base_y = global_position.y
+	_original_scale = scale
+
+	# Apply smaller scale only if it's a pickup-able world object
+	if not placed and not picked_up:
+		scale = _original_scale * world_scale_factor
+
+=======
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 	set_process(true)
 
 
@@ -78,7 +89,11 @@ func _process(delta):
 	else:
 		_show_interaction_hint(false)
 
+<<<<<<< HEAD
+
+=======
 # --- Player picks up barricade into hotbar ---
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _pickup():
 	if picked_up or placed:
 		return
@@ -87,6 +102,15 @@ func _pickup():
 
 	# Restore normal scale before giving to player
 	scale = _original_scale
+<<<<<<< HEAD
+
+	if player and player.has_method("add_item_to_hotbar"):
+		player.add_item_to_hotbar(self)
+	else:
+		push_warning("Player does not have 'add_item_to_hotbar' method!")
+
+
+=======
 
 	if player and player.has_method("add_item_to_hotbar"):
 		var success = player.add_item_to_hotbar(self)
@@ -97,6 +121,7 @@ func _pickup():
 		push_warning("⚠️ Player missing or has no 'add_item_to_hotbar' method!")
 
 # --- Called when player uses the barricade from hotbar ---
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func use_item():
 	if not is_inside_tree() or player == null:
 		return
@@ -122,15 +147,25 @@ func use_item():
 
 	_enable_collisions_recursive(instance)
 	get_tree().current_scene.add_child(instance)
+<<<<<<< HEAD
+
+	print("Barricade placed:", instance.name)
+
+=======
 	print("✅ Barricade placed:", instance.name)
 
 	# Remove self from hotbar after use
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 	if player.has_method("remove_item_from_hotbar"):
 		player.remove_item_from_hotbar(player.current_hotbar_index)
 
 	queue_free()
 
+<<<<<<< HEAD
+
+=======
 # --- When zombies attack or barricade takes damage ---
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func take_damage(amount: int) -> void:
 	health -= amount
 	health = max(health, 0)
@@ -139,14 +174,22 @@ func take_damage(amount: int) -> void:
 		queue_free()
 		print("💥 Barricade destroyed!")
 
+<<<<<<< HEAD
+
+=======
 # --- Helper: enable collisions recursively ---
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _enable_collisions_recursive(node: Node) -> void:
 	if node is CollisionShape3D:
 		node.disabled = false
 	for child in node.get_children():
 		_enable_collisions_recursive(child)
 
+<<<<<<< HEAD
+
+=======
 # --- Interaction prompt (debug/placeholder) ---
+>>>>>>> 68e04d3170727346b804bc12d3440c8c28be5972
 func _show_interaction_hint(visible: bool):
 	if visible:
 		print("Press [E] to pick up %s" % item_name)
