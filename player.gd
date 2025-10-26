@@ -216,6 +216,8 @@ func _select_hotbar_item(index: int):
 		equipped_item.visible = false
 		equipped_item.get_parent().remove_child(equipped_item)
 		hotbar_storage.add_child(equipped_item)
+		# Re-enable collisions when stored
+		_enable_collisions_recursive(equipped_item)
 		equipped_item = null
 
 	var item = hotbar_items[index]
@@ -235,4 +237,22 @@ func _select_hotbar_item(index: int):
 	item.rotation_degrees = item.get("hand_rotation_degrees")
 	item.scale = item.get("hand_scale")
 
+	# --- Disable collisions for equipped item ---
+	_disable_collisions_recursive(item)
+
 	print("Equipped hotbar item %d: %s" % [index + 1, item.name])
+
+
+# --- Helper to disable all collisions recursively ---
+func _disable_collisions_recursive(node: Node) -> void:
+	if node is CollisionShape3D:
+		node.disabled = true
+	for child in node.get_children():
+		_disable_collisions_recursive(child)
+
+# --- Helper to re-enable collisions when unequipped ---
+func _enable_collisions_recursive(node: Node) -> void:
+	if node is CollisionShape3D:
+		node.disabled = false
+	for child in node.get_children():
+		_enable_collisions_recursive(child)
