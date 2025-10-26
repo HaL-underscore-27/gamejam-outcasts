@@ -34,10 +34,19 @@ var player: Node = null
 @onready var mesh: MeshInstance3D = $MeshInstance3D if has_node("MeshInstance3D") else null
 @onready var collider: StaticBody3D = $StaticBody3D if has_node("StaticBody3D") else null
 
+# --- Icon placeholder (replace with your own texture later) ---
+@export var icon_texture: Texture2D = preload("res://images/bagg008_1.webp")
+
 func _ready():
-	player = get_tree().root.get_node("Game/Player")
+	# Safely find player anywhere in the scene tree
+	player = get_tree().get_root().find_child("Player", true, false)
 	if not player:
-		push_warning("Player node not found!")
+		push_warning("⚠️ Barricade: Player node not found in scene tree!")
+	else:
+		print("✅ Barricade linked to player:", player.name)
+
+	# Set metadata for hotbar icon
+	set_meta("icon", icon_texture)
 
 	add_to_group("barricades")
 	_base_y = global_position.y
@@ -69,7 +78,7 @@ func _process(delta):
 	else:
 		_show_interaction_hint(false)
 
-
+# --- Player picks up barricade into hotbar ---
 func _pickup():
 	if picked_up or placed:
 		return
@@ -80,18 +89,22 @@ func _pickup():
 	scale = _original_scale
 
 	if player and player.has_method("add_item_to_hotbar"):
-		player.add_item_to_hotbar(self)
+		var success = player.add_item_to_hotbar(self)
+		if not success:
+			print("⚠️ Hotbar full — could not pick up %s!" % item_name)
+			picked_up = false
 	else:
-		push_warning("Player does not have 'add_item_to_hotbar' method!")
+		push_warning("⚠️ Player missing or has no 'add_item_to_hotbar' method!")
 
-
+# --- Called when player uses the barricade from hotbar ---
 func use_item():
 	if not is_inside_tree() or player == null:
 		return
 
-	var camera: Camera3D = get_parent() if get_parent() and get_parent() is Camera3D else player.get_node("Camera3D") if player.has_node("Camera3D") else null
+	# Find camera (equipped or fallback)
+	var camera: Camera3D = get_parent() if get_parent() is Camera3D else player.get_node_or_null("Head/Camera3D")
 	if camera == null:
-		print("⚠️ Barricade: Camera not found!")
+		push_warning("⚠️ Barricade: Camera not found!")
 		return
 
 	var instance = duplicate()
@@ -109,14 +122,15 @@ func use_item():
 
 	_enable_collisions_recursive(instance)
 	get_tree().current_scene.add_child(instance)
+	print("✅ Barricade placed:", instance.name)
 
-	print("Barricade placed:", instance.name)
-
+	# Remove self from hotbar after use
 	if player.has_method("remove_item_from_hotbar"):
 		player.remove_item_from_hotbar(player.current_hotbar_index)
+
 	queue_free()
 
-
+# --- When zombies attack or barricade takes damage ---
 func take_damage(amount: int) -> void:
 	health -= amount
 	health = max(health, 0)
@@ -125,14 +139,14 @@ func take_damage(amount: int) -> void:
 		queue_free()
 		print("💥 Barricade destroyed!")
 
-
+# --- Helper: enable collisions recursively ---
 func _enable_collisions_recursive(node: Node) -> void:
 	if node is CollisionShape3D:
 		node.disabled = false
 	for child in node.get_children():
 		_enable_collisions_recursive(child)
 
-
+# --- Interaction prompt (debug/placeholder) ---
 func _show_interaction_hint(visible: bool):
 	if visible:
 		print("Press [E] to pick up %s" % item_name)

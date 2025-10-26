@@ -38,6 +38,11 @@ var equipped_item: Node = null
 @onready var barricade_template = get_tree().root.get_node("Game/3d-models/Sandbag") # adjust path
 @onready var zombie_template = get_tree().root.get_node("Game/Zombie") # adjust path
 @onready var shotgun_template = get_tree().root.get_node("Game/3d-models/Shotgun") # adjust path
+@onready var barricade_template = get_tree().get_root().find_child("Sandbag", true, false)
+
+# Instead of hardcoded paths, we’ll search for them dynamically
+var inventory: Node = null
+var hotbar_ui: Node = null
 
 # === Damage flash overlay ===
 @onready var damage_flash_layer: CanvasLayer = CanvasLayer.new()
@@ -47,7 +52,21 @@ var equipped_item: Node = null
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	# Initialize hotbar with empty slots
+	# Try to locate inventory and hotbar safely
+	inventory = get_tree().get_root().find_child("Inventory", true, false)
+	hotbar_ui = get_tree().get_root().find_child("Inventory", true, false)
+
+	if not inventory:
+		push_warning("⚠️ Player: Inventory node not found in scene tree!")
+	else:
+		print("✅ Player linked to inventory:", inventory.get_path())
+
+	if not hotbar_ui:
+		push_warning("⚠️ Player: Hotbar UI node not found in scene tree!")
+	else:
+		print("✅ Player linked to hotbar UI:", hotbar_ui.get_path())
+	
+	# Initialize hotbar
 	hotbar_items.resize(HOTBAR_SIZE)
 	for i in range(HOTBAR_SIZE):
 		hotbar_items[i] = null
@@ -81,8 +100,8 @@ func _trigger_damage_flash():
 	var tween = create_tween()
 	tween.tween_property(damage_flash_rect, "color", Color(1, 0, 0, 0), flash_duration)
 
+# === Input ===
 func _unhandled_input(event):
-	# Camera rotation
 	if event is InputEventMouseMotion:
 		head.rotate_y(-event.relative.x * SENSITIVITY)
 		camera.rotate_x(-event.relative.y * SENSITIVITY)
@@ -107,6 +126,7 @@ func _unhandled_input(event):
 		if equipped_item and equipped_item.has_method("use_item"):
 			equipped_item.use_item()
 
+# === Movement ===
 func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
@@ -147,7 +167,7 @@ func _headbob(time) -> Vector3:
 # === Barricade spawn ===
 func _spawn_barricade():
 	if barricade_template == null:
-		print("Barricade template not found!")
+		print("⚠️ Barricade template not found!")
 		return
 	
 	var barricade_instance = barricade_template.duplicate()
@@ -162,7 +182,7 @@ func _spawn_barricade():
 
 	_set_collision_layer_recursive(barricade_instance, 1)
 	get_tree().current_scene.add_child(barricade_instance)
-	print("Barricade cloned and placed!")
+	print("✅ Barricade cloned and placed!")
 
 	add_item_to_hotbar(barricade_instance)
 
@@ -184,15 +204,28 @@ func _spawn_zombie():
 	get_tree().current_scene.add_child(zombie_instance)
 	print("🧟 Spawned a zombie at", spawn_position)
 
+func _set_collision_layer_recursive(node: Node, layer: int):
+	if node is PhysicsBody3D:
+		node.collision_layer = layer
+	for child in node.get_children():
+		_set_collision_layer_recursive(child, layer)
+
 # === Hotbar system ===
 func add_item_to_hotbar(item_source: Node) -> bool:
+	if not inventory:
+		push_warning("⚠️ Inventory node not found when adding item!")
+		return false
+
 	for i in range(HOTBAR_SIZE):
 		if hotbar_items[i] == null:
 			hotbar_items[i] = item_source
 			if item_source.get_parent():
 				item_source.get_parent().remove_child(item_source)
-			hotbar_storage.add_child(item_source)
+			inventory.add_child(item_source)
 			item_source.visible = false
+			if hotbar_ui and hotbar_ui.has_method("update_hotbar"):
+				hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
+			print("✅ Added item to slot %d: %s" % [i + 1, item_source.name])
 			return true
 	return false
 
@@ -201,13 +234,18 @@ func _select_hotbar_item(index: int):
 
 	if equipped_item:
 		equipped_item.visible = false
-		equipped_item.get_parent().remove_child(equipped_item)
-		hotbar_storage.add_child(equipped_item)
+		if equipped_item.get_parent():
+			equipped_item.get_parent().remove_child(equipped_item)
+		if inventory:
+			inventory.add_child(equipped_item)
 		_enable_collisions_recursive(equipped_item)
 		equipped_item = null
 
 	var item = hotbar_items[index]
 	if item == null:
+		print("Slot %d empty" % (index + 1))
+		if hotbar_ui and hotbar_ui.has_method("update_hotbar"):
+			hotbar_ui.update_hotbar(hotbar_items, current_hotbar_index)
 		return
 
 	if item.get_parent():

@@ -25,7 +25,6 @@ var player: Node = null
 @onready var mesh: MeshInstance3D = $MeshInstance3D if has_node("MeshInstance3D") else null
 @onready var area: Area3D = $Area3D if has_node("Area3D") else null
 
-
 func _ready():
 	player = get_tree().root.get_node("Game/Player")
 	if not player:
@@ -33,6 +32,7 @@ func _ready():
 	_base_y = global_position.y
 	set_process(true)
 
+	set_process(true)
 
 func _process(delta):
 	# Skip if picked up or held
@@ -53,7 +53,6 @@ func _process(delta):
 	else:
 		_show_interaction_hint(false)
 
-
 func _pickup():
 	if picked_up:
 		return
@@ -65,11 +64,16 @@ func _pickup():
 	else:
 		push_warning("Player does not have 'add_item_to_hotbar' method!")
 
-
+# === When the item is used (from hotbar) ===
 func use_item():
 	print("%s eaten!" % item_name)
 	_heal_player()
-	queue_free()
+	
+	# Tell player to remove this item from hotbar immediately
+	if player and player.has_method("remove_item_from_hotbar"):
+		player.remove_item_from_hotbar(player.current_hotbar_index)
+
+	queue_free()  # remove from hand once used
 
 
 func _heal_player():
@@ -78,7 +82,6 @@ func _heal_player():
 		print("Healed %d HP! Current health: %d" % [heal_amount, player.health])
 	else:
 		print("%s could not heal: player not found." % item_name)
-
 
 func _show_interaction_hint(visible: bool):
 	if visible:
